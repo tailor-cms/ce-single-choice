@@ -1,6 +1,7 @@
-// Example counter component
 export interface ElementData {
-  count: number;
+  question: string;
+  correct?: string;
+  answers: Record<string, string>;
 }
 
 export interface Element {
