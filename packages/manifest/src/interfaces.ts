@@ -1,6 +1,6 @@
 export interface ElementData {
   question: string;
-  correct?: string;
+  correct: string;
   answers: Record<string, string>;
 }
 

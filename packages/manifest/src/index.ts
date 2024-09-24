@@ -18,6 +18,7 @@ export const name = 'Single choice';
 // entity)
 export const initState: DataInitializer = (): ElementData => ({
   question: '',
+  correct: '',
   answers: {
     [uuid1]: '',
     [uuid2]: '',
