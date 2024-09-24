@@ -1,10 +1,7 @@
 <template>
   <div class="tce-root">
     <p>This is the Display version of the content element id: {{ id }}</p>
-    <div class="mt-6 mb-2">
-      Counter:
-      <span class="font-weight-bold">{{ data.count }}</span>
-    </div>
+    <div class="mt-6 mb-2">Data: {{ data }}</div>
     <v-btn class="my-6" @click="submit">Update user state</v-btn>
     <div>
       <div class="mb-1 text-subtitle-2">User state:</div>
