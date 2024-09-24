@@ -15,7 +15,11 @@
       variant="outlined"
       auto-grow
     />
-    <VRadioGroup v-model="elementData.correct" :rules="[requiredRule]">
+    <VRadioGroup
+      id="correct-answer"
+      v-model="elementData.correct"
+      :rules="[(val: any) => !!val || 'Please choose the correct answer']"
+    >
       <VSlideYTransition group>
         <VTextField
           v-for="(answer, id, index) in elementData.answers"
@@ -30,6 +34,7 @@
         >
           <template #prepend>
             <VRadio
+              :error="correctAnswerValidation"
               :readonly="isDisabled"
               :value="id"
               color="primary"
@@ -85,10 +90,17 @@ const props = defineProps<{
 }>();
 
 const form = ref<HTMLFormElement>();
+const validate = ref<boolean>(false);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
 const answersCount = computed(() => Object.keys(elementData.answers).length);
 const isDirty = computed(() => isEqual(elementData, props.element.data));
+const correctAnswerValidation = computed(() => {
+  const radioGroup = form.value?.items.find(
+    (it: any) => (it.id = 'correct-answer'),
+  );
+  return radioGroup?.isValid === false;
+});
 
 const addAnswer = () => (elementData.answers[uuid()] = '');
 const removeAnswer = (id: string) => {
@@ -100,7 +112,9 @@ const updateAnswer = (id: string, value: string) =>
 
 const save = async () => {
   const { valid } = await form.value?.validate();
+  validate.value = true;
   if (valid) emit('save', elementData);
+  validate.value = false;
 };
 
 const cancel = () => {
