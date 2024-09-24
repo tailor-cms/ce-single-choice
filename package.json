@@ -1,5 +1,5 @@
 {
-  "name": "ce-single-choice",
+  "name": "@tailor-cms/ce-single-choice",
   "description": "Tailor CMS single choice element",
   "version": "0.0.1",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
