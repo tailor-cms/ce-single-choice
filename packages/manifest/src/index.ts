@@ -6,7 +6,7 @@ import type {
   ElementManifest,
 } from './interfaces';
 
-const [uuid1, uuid2, uuid3] = Array.from({ length: 3 }, () => uuid());
+const [uuid1, uuid2] = Array.from({ length: 2 }, () => uuid());
 
 // Element unique id within the target system (e.g. Tailor)
 export const type = 'CE_MULTIPLE_CHOICE';
@@ -22,7 +22,6 @@ export const initState: DataInitializer = (): ElementData => ({
   answers: {
     [uuid1]: '',
     [uuid2]: '',
-    [uuid3]: '',
   },
 });
 
