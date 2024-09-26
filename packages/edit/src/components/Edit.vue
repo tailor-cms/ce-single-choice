@@ -18,24 +18,24 @@
     <VRadioGroup
       id="correct-answer"
       v-model="elementData.correct"
-      :rules="[(val: any) => !!val || 'Please choose the correct answer']"
+      :rules="[(val: any) => !isNaN(val) || 'Please choose the correct answer']"
     >
       <VSlideYTransition group>
         <VTextField
-          v-for="(answer, id) in elementData.answers"
-          :key="id"
+          v-for="(answer, index) in elementData.answers"
+          :key="index"
           :model-value="answer"
           :readonly="isDisabled"
           :rules="[requiredRule]"
           class="my-2"
           placeholder="Answer..."
-          @update:model-value="updateAnswer(id, $event)"
+          @update:model-value="updateAnswer($event, index)"
         >
           <template #prepend>
             <VRadio
               :error="correctAnswerValidation"
               :readonly="isDisabled"
-              :value="id"
+              :value="index"
               color="primary"
               hide-details
             />
@@ -47,7 +47,7 @@
               density="comfortable"
               icon="mdi-close"
               variant="text"
-              @click="removeAnswer(id)"
+              @click="removeAnswer(index)"
             />
           </template>
         </VTextField>
@@ -78,7 +78,6 @@ import { computed, defineEmits, defineProps, reactive, ref, watch } from 'vue';
 import { Element, ElementData } from '@tailor-cms/ce-single-choice-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
-import { v4 as uuid } from 'uuid';
 
 const emit = defineEmits(['save']);
 const props = defineProps<{
@@ -91,7 +90,7 @@ const form = ref<HTMLFormElement>();
 const validate = ref<boolean>(false);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
-const answersCount = computed(() => Object.keys(elementData.answers).length);
+const answersCount = computed(() => elementData.answers.length);
 const isDirty = computed(() => isEqual(elementData, props.element.data));
 const correctAnswerValidation = computed(() => {
   const radioGroup = form.value?.items.find(
@@ -100,13 +99,15 @@ const correctAnswerValidation = computed(() => {
   return radioGroup?.isValid === false;
 });
 
-const addAnswer = () => (elementData.answers[uuid()] = '');
-const removeAnswer = (id: string) => {
-  delete elementData.answers[id];
-  if (elementData.correct === id) elementData.correct = '';
+const addAnswer = () => elementData.answers.push('');
+const removeAnswer = (index: number) => {
+  elementData.answers.splice(index, 1);
+  if (elementData.correct === index) elementData.correct = null;
+  if (elementData.correct && elementData.correct >= index)
+    elementData.correct--;
 };
-const updateAnswer = (id: string, value: string) =>
-  (elementData.answers[id] = value);
+const updateAnswer = (value: string, index: number) =>
+  (elementData.answers[index] = value);
 
 const save = async () => {
   const { valid } = await form.value?.validate();

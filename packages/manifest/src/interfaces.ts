@@ -1,7 +1,7 @@
 export interface ElementData {
   question: string;
-  correct: string;
-  answers: Record<string, string>;
+  correct: number | null;
+  answers: string[];
 }
 
 export interface Element {

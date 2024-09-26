@@ -13,10 +13,10 @@
         selected-class="bg-blue-grey-lighten-4"
       >
         <VItem
-          v-for="(item, uuid, index) in data.answers"
-          :key="uuid"
+          v-for="(item, index) in data.answers"
+          :key="index"
           v-slot="{ toggle, isSelected, selectedClass }"
-          :value="uuid"
+          :value="index"
         >
           <VCard
             :class="selectedClass"
@@ -39,7 +39,7 @@
             {{ item }}
             <VSpacer />
             <template v-if="submitted">
-              <VIcon v-if="isSelected" v-bind="iconProps(uuid)" />
+              <VIcon v-if="isSelected" v-bind="iconProps(index)" />
             </template>
           </VCard>
         </VItem>
@@ -69,7 +69,7 @@ const emit = defineEmits(['interaction']);
 
 const form = ref<HTMLFormElement>();
 const submitted = ref('isCorrect' in (props.userState ?? {}));
-const selectedAnswer = ref<string[]>(props.userState?.response ?? []);
+const selectedAnswer = ref<string[]>(props.userState?.response);
 
 const submit = async () => {
   const { valid } = await form.value?.validate();
@@ -82,8 +82,8 @@ const requiredRule = (val: string | boolean | number) => {
   return !!val || 'You have to select an answer.';
 };
 
-const iconProps = (uuid: string) => {
-  const isCorrect = props.userState?.correct === uuid;
+const iconProps = (index: number) => {
+  const isCorrect = props.userState?.correct === index;
   if (isCorrect) return { icon: 'mdi-check-circle', color: 'success' };
   return { icon: 'mdi-close-circle', color: 'error' };
 };
@@ -91,7 +91,7 @@ const iconProps = (uuid: string) => {
 watch(
   () => props.userState,
   (state = {}) => {
-    selectedAnswer.value = state.response || [];
+    selectedAnswer.value = state.response;
     submitted.value = 'isCorrect' in state;
   },
   { deep: true },
