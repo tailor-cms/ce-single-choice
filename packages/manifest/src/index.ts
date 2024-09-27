@@ -5,15 +5,18 @@ import type {
 } from './interfaces';
 
 // Element unique id within the target system (e.g. Tailor)
-export const type = 'ORG_CUSTOM_ELEMENT';
+export const type = 'CE_MULTIPLE_CHOICE';
 
 // Display name (e.g. shown to the author)
-export const name = 'Custom element';
+export const name = 'Single choice';
 
 // Function which inits element state (data property on the Content Element
 // entity)
-// e.g. for simple counter component:
-export const initState: DataInitializer = (): ElementData => ({ count: 0 });
+export const initState: DataInitializer = (): ElementData => ({
+  question: '',
+  correct: null,
+  answers: ['', ''],
+});
 
 // Can be loaded from package.json
 export const version = '1.0';
@@ -21,17 +24,14 @@ export const version = '1.0';
 // UI configuration for Tailor CMS
 const ui = {
   // Display icon, https://pictogrammers.com/library/mdi/
-  icon: 'mdi-cube',
+  icon: 'mdi-order-bool-ascending',
   // Does element support only full width or can be used within layouts
   // (e.g. 50/50 layout)
   forceFullWidth: true,
 };
 
 export const mocks = {
-  displayContexts: [
-    { name: 'Test preset 1', data: { state: 'I have a value' } },
-    { name: 'Test preset 2', data: { state: 'I have a different value' } },
-  ],
+  displayContexts: [{ name: 'No selection', data: {} }],
 };
 
 const manifest: ElementManifest = {
