@@ -18,7 +18,8 @@
     <VRadioGroup
       id="correct-answer"
       v-model="elementData.correct"
-      :rules="[(val: any) => !isNaN(val) || 'Please choose the correct answer']"
+      :rules="[(val: any) => val || 'Please choose the correct answer']"
+      :validation-value="typeof elementData.correct === 'number'"
     >
       <VSlideYTransition group>
         <VTextField
