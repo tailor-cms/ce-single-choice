@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.4
+
+### Patch Changes
+
+- Update validation
+
 ## 0.0.3
 
 ### Patch Changes
