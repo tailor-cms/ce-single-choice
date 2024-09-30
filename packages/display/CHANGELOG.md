@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.5
+
+### Patch Changes
+
+- Display component validation updated
+
 ## 0.0.4
 
 ### Patch Changes
