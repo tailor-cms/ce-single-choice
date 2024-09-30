@@ -3,7 +3,7 @@
     <div class="px-2 my-4">{{ data.question }}</div>
     <VInput
       :rules="[requiredRule]"
-      :validation-value="selectedAnswer.length != 0"
+      :validation-value="selectedAnswer !== null"
       hide-details="auto"
       validate-on="submit"
     >
@@ -11,6 +11,7 @@
         v-model="selectedAnswer"
         class="w-100"
         selected-class="bg-blue-grey-lighten-4"
+        mandatory
       >
         <VItem
           v-for="(item, index) in data.answers"
@@ -69,13 +70,11 @@ const emit = defineEmits(['interaction']);
 
 const form = ref<HTMLFormElement>();
 const submitted = ref('isCorrect' in (props.userState ?? {}));
-const selectedAnswer = ref<string[]>(props.userState?.response);
+const selectedAnswer = ref<string>(props.userState?.response ?? null);
 
 const submit = async () => {
   const { valid } = await form.value?.validate();
-  if (valid) {
-    emit('interaction', { response: selectedAnswer.value });
-  }
+  if (valid) emit('interaction', { response: selectedAnswer.value });
 };
 
 const requiredRule = (val: string | boolean | number) => {
@@ -91,7 +90,7 @@ const iconProps = (index: number) => {
 watch(
   () => props.userState,
   (state = {}) => {
-    selectedAnswer.value = state.response;
+    selectedAnswer.value = state.response ?? null;
     submitted.value = 'isCorrect' in state;
   },
   { deep: true },

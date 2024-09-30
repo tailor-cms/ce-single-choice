@@ -18,8 +18,7 @@
     <VRadioGroup
       id="correct-answer"
       v-model="elementData.correct"
-      :rules="[(val: any) => val || 'Please choose the correct answer']"
-      :validation-value="typeof elementData.correct === 'number'"
+      :rules="[(val: any) => val ?? 'Please choose the correct answer']"
     >
       <VSlideYTransition group>
         <VTextField
@@ -88,7 +87,6 @@ const props = defineProps<{
 }>();
 
 const form = ref<HTMLFormElement>();
-const validate = ref<boolean>(false);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
 const answersCount = computed(() => elementData.answers.length);
@@ -112,9 +110,7 @@ const updateAnswer = (value: string, index: number) =>
 
 const save = async () => {
   const { valid } = await form.value?.validate();
-  validate.value = true;
   if (valid) emit('save', elementData);
-  validate.value = false;
 };
 
 const cancel = () => {
