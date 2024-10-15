@@ -1,7 +1,7 @@
 <template>
   <VForm
     ref="form"
-    class="tce-container"
+    class="tce-single-choice"
     validate-on="submit"
     @submit.prevent="save"
   >
@@ -14,31 +14,35 @@
       rows="3"
       auto-grow
     />
-    <div class="text-subtitle-2 mb-2">Select correct answer</div>
+    <div class="text-subtitle-2 mb-2">{{ title }}</div>
     <VRadioGroup
       id="correct-answer"
       v-model="elementData.correct"
-      :rules="[(val: any) => val ?? 'Please choose the correct answer']"
+      :rules="[props.isGraded && requiredRule].filter(Boolean)"
     >
       <VSlideYTransition group>
         <VTextField
           v-for="(answer, index) in elementData.answers"
           :key="index"
           :model-value="answer"
+          :placeholder="placeholder"
           :readonly="isDisabled"
           :rules="[requiredRule]"
           class="my-2"
-          placeholder="Answer..."
           @update:model-value="updateAnswer($event, index)"
         >
           <template #prepend>
             <VRadio
+              v-if="isGraded"
               :error="correctAnswerValidation"
               :readonly="isDisabled"
               :value="index"
               color="primary"
               hide-details
             />
+            <VAvatar v-else color="primary" variant="tonal">
+              {{ index + 1 }}
+            </VAvatar>
           </template>
           <template #append>
             <VBtn
@@ -61,7 +65,7 @@
         rounded
         @click="addAnswer"
       >
-        Add Answer
+        {{ btnLabel }}
       </VBtn>
     </div>
     <div v-if="!isDisabled" class="d-flex justify-end">
@@ -84,6 +88,7 @@ const props = defineProps<{
   element: Element;
   isFocused: boolean;
   isDisabled: boolean;
+  isGraded: boolean;
 }>();
 
 const form = ref<HTMLFormElement>();
@@ -98,13 +103,27 @@ const correctAnswerValidation = computed(() => {
   return radioGroup?.isValid === false;
 });
 
+const title = computed(() =>
+  props.isGraded ? 'Select correct answer' : 'Options',
+);
+
+const placeholder = computed(() =>
+  props.isGraded ? 'Answer...' : 'Option...',
+);
+
+const btnLabel = computed(() => (props.isGraded ? 'Add answer' : 'Add option'));
+
 const addAnswer = () => elementData.answers.push('');
 const removeAnswer = (index: number) => {
   elementData.answers.splice(index, 1);
-  if (elementData.correct === index) elementData.correct = null;
-  if (elementData.correct && elementData.correct >= index)
-    elementData.correct--;
+
+  if (props.isGraded) {
+    if (elementData.correct === index) elementData.correct = null;
+    if (elementData.correct && elementData.correct >= index)
+      elementData.correct--;
+  }
 };
+
 const updateAnswer = (value: string, index: number) =>
   (elementData.answers[index] = value);
 
@@ -119,7 +138,8 @@ const cancel = () => {
 };
 
 const requiredRule = (val: string | boolean | number) => {
-  return !!val || 'The field is required';
+  if (val !== null && val !== undefined && val !== '') return true;
+  return 'The field is required';
 };
 
 watch(
@@ -129,7 +149,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.tce-container {
+.tce-single-choice {
   text-align: left;
 }
 </style>
