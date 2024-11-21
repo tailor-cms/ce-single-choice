@@ -1,7 +1,8 @@
-# tce-template
+# ce-multiple-choice
 
-Base template for Tailor Content Element Kit. For more details see
-[docs](https://tailor-cms.github.io/xt/).
+Tailor single choice content element component.
+
+Make sure to set TAILOR_NEXT=true .env variable to enable Vue 3 based authoring runtime.
 
 ## Usage
 
