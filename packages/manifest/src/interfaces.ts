@@ -1,7 +1,9 @@
 export interface ElementData {
   question: string;
-  correct: number | null;
+  correct?: number | null;
   answers: string[];
+  hint: string;
+  feedback: { [key: number]: string };
 }
 
 export interface Element {
@@ -30,6 +32,7 @@ export interface ElementManifest {
   version: string;
   name: string;
   ssr: boolean;
+  isQuestion: boolean;
   initState: DataInitializer;
   Edit?: object;
   TopToolbar?: object;

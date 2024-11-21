@@ -1,24 +1,23 @@
 <template>
   <VForm
     ref="form"
-    class="tce-single-choice"
+    class="tce-single-choice my-4"
     validate-on="submit"
     @submit.prevent="save"
   >
-    <VTextarea
+    <RichTextEditor
       v-model="elementData.question"
       :readonly="isDisabled"
       :rules="[requiredRule]"
       class="my-3"
       label="Question"
-      rows="3"
-      auto-grow
+      variant="outlined"
     />
     <div class="text-subtitle-2 mb-2">{{ title }}</div>
     <VRadioGroup
       id="correct-answer"
       v-model="elementData.correct"
-      :rules="[props.isGraded && requiredRule].filter(Boolean)"
+      :rules="[isGraded && requiredRule].filter(Boolean)"
     >
       <VSlideYTransition group>
         <VTextField
@@ -29,6 +28,7 @@
           :readonly="isDisabled"
           :rules="[requiredRule]"
           class="my-2"
+          variant="outlined"
           @update:model-value="updateAnswer($event, index)"
         >
           <template #prepend>
@@ -40,7 +40,7 @@
               color="primary"
               hide-details
             />
-            <VAvatar v-else color="primary" variant="tonal">
+            <VAvatar v-else color="primary-darken-3" variant="tonal">
               {{ index + 1 }}
             </VAvatar>
           </template>
@@ -48,6 +48,7 @@
             <VBtn
               v-if="!isDisabled && answersCount > 2"
               aria-label="Remove answer"
+              color="primary-darken-4"
               density="comfortable"
               icon="mdi-close"
               variant="text"
@@ -57,9 +58,10 @@
         </VTextField>
       </VSlideYTransition>
     </VRadioGroup>
-    <div class="d-flex justify-center align-center mb-2">
+    <div class="d-flex justify-end mb-12">
       <VBtn
         v-if="!isDisabled"
+        color="primary-darken-4"
         prepend-icon="mdi-plus"
         variant="text"
         rounded
@@ -68,9 +70,36 @@
         {{ btnLabel }}
       </VBtn>
     </div>
+    <VTextField
+      v-model="elementData.hint"
+      :clearable="!isDisabled"
+      :readonly="isDisabled"
+      placeholder="Optional hint..."
+      variant="outlined"
+    />
+    <QuestionFeedback
+      :answers="elementData.answers"
+      :feedback="elementData.feedback || {}"
+      :is-editing="!isDisabled"
+      :is-graded="isGraded"
+      @update="Object.assign(elementData.feedback, $event)"
+    />
     <div v-if="!isDisabled" class="d-flex justify-end">
-      <VBtn :disabled="isDirty" variant="text" @click="cancel">Cancel</VBtn>
-      <VBtn :disabled="isDirty" class="ml-2" type="submit" variant="tonal">
+      <VBtn
+        :disabled="isDirty"
+        color="primary-darken-4"
+        variant="text"
+        @click="cancel"
+      >
+        Cancel
+      </VBtn>
+      <VBtn
+        :disabled="isDirty"
+        class="ml-2"
+        color="primary-darken-3"
+        type="submit"
+        variant="tonal"
+      >
         Save
       </VBtn>
     </div>
@@ -80,8 +109,10 @@
 <script lang="ts" setup>
 import { computed, defineEmits, defineProps, reactive, ref, watch } from 'vue';
 import { Element, ElementData } from '@tailor-cms/ce-single-choice-manifest';
+import { QuestionFeedback, RichTextEditor } from '@tailor-cms/core-components';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
+import isNumber from 'lodash/isNumber';
 
 const emit = defineEmits(['save']);
 const props = defineProps<{
@@ -137,14 +168,23 @@ const cancel = () => {
   form.value?.resetValidation();
 };
 
-const requiredRule = (val: string | boolean | number) => {
-  if (val !== null && val !== undefined && val !== '') return true;
-  return 'The field is required';
+const requiredRule = (val?: string | number) => {
+  return !!val || isNumber(val) || 'The field is required.';
 };
 
 watch(
   () => props.element.data,
   (data) => Object.assign(elementData, cloneDeep(data)),
+);
+
+watch(
+  () => props.isGraded,
+  (val) => {
+    if (!val) delete elementData.correct;
+    else elementData.correct = null;
+    emit('save', elementData);
+  },
+  { immediate: true },
 );
 </script>
 
