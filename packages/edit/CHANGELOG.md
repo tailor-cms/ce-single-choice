@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-edit
 
+## 0.0.6
+
+### Patch Changes
+
+- Introduced isGraded option, refactored question types.
+
 ## 0.0.5
 
 ### Patch Changes
