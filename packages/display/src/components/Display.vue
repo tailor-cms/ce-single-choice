@@ -100,6 +100,7 @@ const selectedAnswer = ref<string>(props.userState.response ?? null);
 const alertProps = computed(() => {
   const isGraded = 'isCorrect' in props.userState;
   const isCorrect = props.userState.isCorrect;
+
   if (!isGraded) return { text: 'Submitted', type: 'info' };
   if (isCorrect) return { text: 'Correct', type: 'success' };
   return { text: 'Incorrect', type: 'error' };
