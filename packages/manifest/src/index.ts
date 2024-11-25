@@ -14,7 +14,6 @@ export const name = 'Single choice';
 // entity)
 export const initState: DataInitializer = (): ElementData => ({
   question: '',
-  correct: null,
   answers: ['', ''],
   hint: '',
   feedback: {},
