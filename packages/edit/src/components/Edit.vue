@@ -1,22 +1,15 @@
 <template>
-  <VForm
-    ref="form"
-    class="tce-single-choice my-4"
-    validate-on="submit"
-    @submit.prevent="save"
+  <QuestionContainer
+    v-bind="{ elementData, isDirty, isDisabled, isGraded, name, icon }"
+    show-feedback
+    @cancel="updateData(element.data)"
+    @save="save"
+    @update="updateData($event)"
   >
-    <div class="text-subtitle-2 mb-2">Question</div>
-    <RichTextEditor
-      v-model="elementData.question"
-      :readonly="isDisabled"
-      :rules="[requiredRule]"
-      class="my-3"
-      variant="outlined"
-    />
-    <div class="text-subtitle-2 mb-2">{{ title }}</div>
-    <VRadioGroup
-      id="correct-answer"
-      v-model="elementData.correct"
+    <div class="text-left text-subtitle-2 mb-2">{{ title }}</div>
+    <VInput
+      v-slot="{ isValid }"
+      :model-value="elementData.correct"
       :rules="[isGraded && requiredRule].filter(Boolean)"
     >
       <VSlideYTransition group>
@@ -27,26 +20,26 @@
           :placeholder="placeholder"
           :readonly="isDisabled"
           :rules="[requiredRule]"
-          class="my-2"
+          class="my-2 w-100"
           variant="outlined"
           @update:model-value="updateAnswer($event, index)"
         >
           <template #prepend>
             <VRadio
               v-if="isGraded"
-              :error="correctAnswerValidation"
+              :error="!isValid.value"
               :readonly="isDisabled"
               :value="index"
               color="primary"
               hide-details
+              @click="elementData.correct = index"
             />
             <VAvatar v-else color="primary-darken-3" variant="tonal">
               {{ index + 1 }}
             </VAvatar>
           </template>
-          <template #append>
+          <template v-if="!isDisabled && answersCount > 2" #append>
             <VBtn
-              v-if="!isDisabled && answersCount > 2"
               aria-label="Remove answer"
               color="primary-darken-4"
               density="comfortable"
@@ -57,8 +50,8 @@
           </template>
         </VTextField>
       </VSlideYTransition>
-    </VRadioGroup>
-    <div class="d-flex justify-end mb-12">
+    </VInput>
+    <div class="d-flex justify-end mb-4">
       <VBtn
         v-if="!isDisabled"
         color="primary-darken-4"
@@ -70,50 +63,24 @@
         {{ btnLabel }}
       </VBtn>
     </div>
-    <div class="text-subtitle-2 mb-2">Hint</div>
-    <VTextField
-      v-model="elementData.hint"
-      :clearable="!isDisabled"
-      :readonly="isDisabled"
-      placeholder="Optional hint..."
-      variant="outlined"
-    />
-    <QuestionFeedback
-      :answers="elementData.answers"
-      :feedback="elementData.feedback || {}"
-      :is-editing="!isDisabled"
-      :is-graded="isGraded"
-      @update="Object.assign(elementData.feedback, $event)"
-    />
-    <div v-if="!isDisabled" class="d-flex justify-end">
-      <VBtn
-        :disabled="isDirty"
-        color="primary-darken-4"
-        variant="text"
-        @click="cancel"
-      >
-        Cancel
-      </VBtn>
-      <VBtn
-        :disabled="isDirty"
-        class="ml-2"
-        color="primary-darken-3"
-        type="submit"
-        variant="tonal"
-      >
-        Save
-      </VBtn>
-    </div>
-  </VForm>
+  </QuestionContainer>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineEmits, defineProps, reactive, ref, watch } from 'vue';
-import { Element, ElementData } from '@tailor-cms/ce-single-choice-manifest';
-import { QuestionFeedback, RichTextEditor } from '@tailor-cms/core-components';
+import { computed, defineEmits, defineProps, reactive, watch } from 'vue';
+import manifest, {
+  Element,
+  ElementData,
+} from '@tailor-cms/ce-single-choice-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import isNumber from 'lodash/isNumber';
+import { QuestionContainer } from '@tailor-cms/core-components';
+
+const {
+  name,
+  ui: { icon },
+} = manifest;
 
 const emit = defineEmits(['save']);
 const props = defineProps<{
@@ -123,17 +90,10 @@ const props = defineProps<{
   isGraded: boolean;
 }>();
 
-const form = ref<HTMLFormElement>();
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
 const answersCount = computed(() => elementData.answers.length);
-const isDirty = computed(() => isEqual(elementData, props.element.data));
-const correctAnswerValidation = computed(() => {
-  const radioGroup = form.value?.items.find(
-    (it: any) => (it.id = 'correct-answer'),
-  );
-  return radioGroup?.isValid === false;
-});
+const isDirty = computed(() => !isEqual(elementData, props.element.data));
 
 const title = computed(() =>
   props.isGraded ? 'Select correct answer' : 'Options',
@@ -159,24 +119,16 @@ const removeAnswer = (index: number) => {
 const updateAnswer = (value: string, index: number) =>
   (elementData.answers[index] = value);
 
-const save = async () => {
-  const { valid } = await form.value?.validate();
-  if (valid) emit('save', elementData);
-};
-
-const cancel = () => {
-  Object.assign(elementData, cloneDeep(props.element.data));
-  form.value?.resetValidation();
+const save = () => emit('save', elementData);
+const updateData = (data: ElementData) => {
+  Object.assign(elementData, cloneDeep(data));
 };
 
 const requiredRule = (val?: string | number) => {
   return !!val || isNumber(val) || 'The field is required.';
 };
 
-watch(
-  () => props.element.data,
-  (data) => Object.assign(elementData, cloneDeep(data)),
-);
+watch(() => props.element.data, updateData);
 
 watch(
   () => props.isGraded,

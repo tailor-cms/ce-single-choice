@@ -1,7 +1,6 @@
 <template>
   <VForm ref="form" class="tce-root" @submit.prevent="submit">
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <div class="rich-text px-2 my-4" v-html="data.question"></div>
+    <EmbeddedContainer :elements="questionPrompt" />
     <div v-if="data.hint" class="d-flex justify-end mb-4">
       <VTooltip
         v-model="showHint"
@@ -104,6 +103,10 @@ const alertProps = computed(() => {
   if (!isGraded) return { text: 'Submitted', type: 'info' };
   if (isCorrect) return { text: 'Correct', type: 'success' };
   return { text: 'Incorrect', type: 'error' };
+});
+
+const questionPrompt = computed(() => {
+  return props.data.question.map((id) => props.data.embeds[id]);
 });
 
 const submit = async () => {

@@ -1,5 +1,6 @@
 export interface ElementData {
-  question: string;
+  embeds: Record<string, any>;
+  question: string[];
   correct?: number | null;
   answers: string[];
   hint: string;
@@ -32,6 +33,7 @@ export interface ElementManifest {
   version: string;
   name: string;
   ssr: boolean;
+  isComposite: boolean;
   isQuestion: boolean;
   initState: DataInitializer;
   Edit?: object;
