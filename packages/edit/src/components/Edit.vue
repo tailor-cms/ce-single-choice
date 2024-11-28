@@ -10,7 +10,8 @@
     <VInput
       v-slot="{ isValid }"
       :model-value="elementData.correct"
-      :rules="[isGraded && requiredRule].filter(Boolean)"
+      :rules="validation.correct"
+      hide-details="auto"
     >
       <VSlideYTransition group>
         <VTextField
@@ -19,8 +20,9 @@
           :model-value="answer"
           :placeholder="placeholder"
           :readonly="isDisabled"
-          :rules="[requiredRule]"
+          :rules="validation.answer"
           class="my-2 w-100"
+          hide-details="auto"
           variant="outlined"
           @update:model-value="updateAnswer($event, index)"
         >
@@ -34,7 +36,12 @@
               hide-details
               @click="elementData.correct = index"
             />
-            <VAvatar v-else color="primary-darken-3" variant="tonal">
+            <VAvatar
+              v-else
+              class="font-weight-bold ma-1"
+              color="primary-darken-3"
+              size="small"
+            >
               {{ index + 1 }}
             </VAvatar>
           </template>
@@ -74,7 +81,6 @@ import manifest, {
 } from '@tailor-cms/ce-single-choice-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
-import isNumber from 'lodash/isNumber';
 import { QuestionContainer } from '@tailor-cms/core-components';
 
 const {
@@ -105,6 +111,13 @@ const placeholder = computed(() =>
 
 const btnLabel = computed(() => (props.isGraded ? 'Add answer' : 'Add option'));
 
+const validation = computed(() => ({
+  answer: [(val: string) => !!val || 'Answer is required.'],
+  correct: props.isGraded
+    ? [(val: string) => !!val || 'Please choose the correct answer']
+    : [],
+}));
+
 const addAnswer = () => elementData.answers.push('');
 const removeAnswer = (index: number) => {
   elementData.answers.splice(index, 1);
@@ -122,10 +135,6 @@ const updateAnswer = (value: string, index: number) =>
 const save = () => emit('save', elementData);
 const updateData = (data: ElementData) => {
   Object.assign(elementData, cloneDeep(data));
-};
-
-const requiredRule = (val?: string | number) => {
-  return !!val || isNumber(val) || 'The field is required.';
 };
 
 watch(() => props.element.data, updateData);
