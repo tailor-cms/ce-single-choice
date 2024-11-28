@@ -1,6 +1,14 @@
 <template>
   <QuestionContainer
-    v-bind="{ elementData, isDirty, isDisabled, isGraded, name, icon }"
+    v-bind="{
+      allowedTypes,
+      elementData,
+      isDirty,
+      isDisabled,
+      isGraded,
+      name,
+      icon,
+    }"
     show-feedback
     @cancel="updateData(element.data)"
     @save="save"
@@ -11,7 +19,6 @@
       v-slot="{ isValid }"
       :model-value="elementData.correct"
       :rules="validation.correct"
-      hide-details="auto"
     >
       <VSlideYTransition group>
         <VTextField
@@ -22,7 +29,6 @@
           :readonly="isDisabled"
           :rules="validation.answer"
           class="my-2 w-100"
-          hide-details="auto"
           variant="outlined"
           @update:model-value="updateAnswer($event, index)"
         >
@@ -90,6 +96,7 @@ const {
 
 const emit = defineEmits(['save']);
 const props = defineProps<{
+  allowedTypes: string[];
   element: Element;
   isFocused: boolean;
   isDisabled: boolean;
