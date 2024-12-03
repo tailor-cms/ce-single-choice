@@ -1,13 +1,11 @@
 <template>
   <QuestionContainer
     v-bind="{
-      allowedTypes,
+      allowedEmbedTypes,
       elementData,
       isDirty,
       isDisabled,
-      isGraded,
-      name,
-      icon,
+      isGradeable,
     }"
     show-feedback
     @cancel="updateData(element.data)"
@@ -34,8 +32,8 @@
         >
           <template #prepend>
             <VRadio
-              v-if="isGraded"
-              :error="!isValid.value"
+              v-if="isGradeable"
+              :error="isValid.value === false"
               :readonly="isDisabled"
               :value="index"
               color="primary"
@@ -81,26 +79,18 @@
 
 <script lang="ts" setup>
 import { computed, defineEmits, defineProps, reactive, watch } from 'vue';
-import manifest, {
-  Element,
-  ElementData,
-} from '@tailor-cms/ce-single-choice-manifest';
+import { Element, ElementData } from '@tailor-cms/ce-single-choice-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import { QuestionContainer } from '@tailor-cms/core-components';
 
-const {
-  name,
-  ui: { icon },
-} = manifest;
-
 const emit = defineEmits(['save']);
 const props = defineProps<{
-  allowedTypes: string[];
+  allowedEmbedTypes: string[];
   element: Element;
   isFocused: boolean;
   isDisabled: boolean;
-  isGraded: boolean;
+  isGradeable: boolean;
 }>();
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
@@ -109,18 +99,20 @@ const answersCount = computed(() => elementData.answers.length);
 const isDirty = computed(() => !isEqual(elementData, props.element.data));
 
 const title = computed(() =>
-  props.isGraded ? 'Select correct answer' : 'Options',
+  props.isGradeable ? 'Select correct answer' : 'Options',
 );
 
 const placeholder = computed(() =>
-  props.isGraded ? 'Answer...' : 'Option...',
+  props.isGradeable ? 'Answer...' : 'Option...',
 );
 
-const btnLabel = computed(() => (props.isGraded ? 'Add answer' : 'Add option'));
+const btnLabel = computed(() =>
+  props.isGradeable ? 'Add answer' : 'Add option',
+);
 
 const validation = computed(() => ({
   answer: [(val: string) => !!val || 'Answer is required.'],
-  correct: props.isGraded
+  correct: props.isGradeable
     ? [(val: string) => !!val || 'Please choose the correct answer']
     : [],
 }));
@@ -129,7 +121,7 @@ const addAnswer = () => elementData.answers.push('');
 const removeAnswer = (index: number) => {
   elementData.answers.splice(index, 1);
 
-  if (props.isGraded) {
+  if (props.isGradeable) {
     if (elementData.correct === index) elementData.correct = null;
     if (elementData.correct && elementData.correct >= index)
       elementData.correct--;
@@ -147,7 +139,7 @@ const updateData = (data: ElementData) => {
 watch(() => props.element.data, updateData);
 
 watch(
-  () => props.isGraded,
+  () => props.isGradeable,
   (val) => {
     if (!val) delete elementData.correct;
     else elementData.correct = null;
