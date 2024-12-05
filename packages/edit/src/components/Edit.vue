@@ -34,8 +34,8 @@
             <VRadio
               v-if="isGradeable"
               :error="isValid.value === false"
+              :model-value="elementData.correct === index"
               :readonly="isDisabled"
-              :value="index"
               color="primary"
               hide-details
               @click="elementData.correct = index"
@@ -82,6 +82,7 @@ import { computed, defineEmits, defineProps, reactive, watch } from 'vue';
 import { Element, ElementData } from '@tailor-cms/ce-single-choice-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
+import isNumber from 'lodash/isNumber';
 import { QuestionContainer } from '@tailor-cms/core-components';
 
 const emit = defineEmits(['save']);
@@ -113,7 +114,7 @@ const btnLabel = computed(() =>
 const validation = computed(() => ({
   answer: [(val: string) => !!val || 'Answer is required.'],
   correct: props.isGradeable
-    ? [(val: string) => !!val || 'Please choose the correct answer']
+    ? [(val: string) => isNumber(val) || 'Please choose the correct answer']
     : [],
 }));
 
@@ -137,16 +138,6 @@ const updateData = (data: ElementData) => {
 };
 
 watch(() => props.element.data, updateData);
-
-watch(
-  () => props.isGradeable,
-  (val) => {
-    if (!val) delete elementData.correct;
-    else elementData.correct = null;
-    emit('save', elementData);
-  },
-  { immediate: true },
-);
 </script>
 
 <style lang="scss" scoped>

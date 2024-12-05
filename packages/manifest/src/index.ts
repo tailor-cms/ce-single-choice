@@ -13,6 +13,7 @@ export const name = 'Single choice';
 // Function which inits element state (data property on the Content Element
 // entity)
 export const initState: DataInitializer = (): ElementData => ({
+  correct: null,
   embeds: {},
   question: [],
   answers: ['', ''],
