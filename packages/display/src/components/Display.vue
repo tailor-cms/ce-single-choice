@@ -63,7 +63,7 @@
                 color="blue-grey-darken-2"
                 size="small"
               >
-                {{ index + 1 }}
+                {{ indexToAlpha(index) }}
               </VAvatar>
               {{ item }}
               <VSpacer />
@@ -81,7 +81,25 @@
         class="mb-3"
         rounded="lg"
         variant="tonal"
-      />
+        border
+      >
+        <div
+          v-if="!!Object.keys(data.feedback).length"
+          class="d-flex flex-column ga-2 mt-4"
+        >
+          <VCard
+            v-for="(it, key) in data.feedback"
+            :key="key"
+            variant="tonal"
+            rounded
+          >
+            <VCardText class="d-flex">
+              <!-- eslint-disable-next-line vue/no-v-html vue/no-v-text-v-html-on-component -->
+              <div class="feedback" v-html="it"></div>
+            </VCardText>
+          </VCard>
+        </div>
+      </VAlert>
       <div class="d-flex justify-end">
         <VBtn
           v-if="!submitted"
@@ -114,28 +132,27 @@ const emit = defineEmits(['interaction']);
 
 const form = ref<HTMLFormElement>();
 const showHint = ref(false);
-const submitted = ref(false);
+const submitted = ref(!!props.userState.isSubmitted);
 const selectedAnswer = ref<string>(props.userState.response ?? null);
 
 const alertProps = computed(() => {
   const isGraded = 'isCorrect' in props.userState;
   const isCorrect = props.userState.isCorrect;
 
-  if (!isGraded) return { text: 'Submitted', type: 'info' };
-  if (isCorrect) return { text: 'Correct', type: 'success' };
-  return { text: 'Incorrect', type: 'error' };
+  if (!isGraded) return { title: 'Submitted', type: 'info' };
+  if (isCorrect) return { title: 'Correct', type: 'success' };
+  return { title: 'Incorrect', type: 'error' };
 });
 
 const questionPrompt = computed(() => {
   return props.data.question.map((id) => props.data.embeds[id]);
 });
 
+const indexToAlpha = (index: number) => String.fromCharCode(index + 65);
+
 const submit = async () => {
   const { valid } = await form.value?.validate();
-  if (valid) {
-    submitted.value = true;
-    emit('interaction', { response: selectedAnswer.value });
-  }
+  if (valid) emit('interaction', { response: selectedAnswer.value });
 };
 
 const requiredRule = (val: string | boolean | number) => {
@@ -152,14 +169,48 @@ watch(
   () => props.userState,
   (state = {}) => {
     selectedAnswer.value = state.response ?? null;
+    submitted.value = !!state.isSubmitted;
   },
   { deep: true },
 );
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tce-root {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1rem;
+}
+
+:deep(.feedback) {
+  width: 100%;
+
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+
+  pre {
+    background: #0d0d0d;
+    white-space: break-spaces;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid color-mix(in srgb, currentColor 20%, transparent);
+  }
 }
 </style>

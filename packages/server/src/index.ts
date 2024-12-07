@@ -56,7 +56,7 @@ export function onUserInteraction(
     // Can be reset to initial / mocked state via UI
     context.response = payload.response;
     if (isGradeable) context.isCorrect = isCorrect;
-    else delete context.isCorrect;
+    context.isSubmitted = true;
   }
   // Can have arbitrary return value (interpreted by target system)
   // FE is updated if updateDisplayState is true
