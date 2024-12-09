@@ -39,8 +39,8 @@ importers:
   packages/display:
     dependencies:
       '@tailor-cms/lx-components':
-        specifier: ^0.0.1
-        version: 0.0.1(vue@3.3.4)(vuetify@3.7.3)
+        specifier: ^0.0.2
+        version: 0.0.2(vue@3.3.4)(vuetify@3.7.3)
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -67,8 +67,8 @@ importers:
   packages/edit:
     dependencies:
       '@tailor-cms/core-components':
-        specifier: ^1.0.19
-        version: 1.0.19(@tailor-cms/utils@1.0.1)(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(@tiptap/starter-kit@2.10.3)(@tiptap/vue-3@2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(vue@3.3.4))(@types/lodash@4.17.9)(@types/pluralize@0.0.33)(@types/uuid@10.0.0)(date-fns@3.6.0)(lodash@4.17.21)(p-min-delay@4.0.2)(pluralize@8.0.0)(uuid@11.0.3)(vee-validate@4.14.7(vue@3.3.4))(vue@3.3.4)(vuedraggable@4.1.0(vue@3.3.4))(vuetify@3.7.3)(yup@1.4.0)
+        specifier: ^1.0.20
+        version: 1.0.20(@tailor-cms/utils@1.0.1)(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(@tiptap/starter-kit@2.10.3)(@tiptap/vue-3@2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(vue@3.3.4))(@types/lodash@4.17.9)(@types/pluralize@0.0.33)(date-fns@3.6.0)(lodash@4.17.21)(p-min-delay@4.0.2)(pluralize@8.0.0)(vee-validate@4.14.7(vue@3.3.4))(vue@3.3.4)(vuedraggable@4.1.0(vue@3.3.4))(vuetify@3.7.3)(yup@1.4.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -699,8 +699,8 @@ packages:
   '@tailor-cms/cek-common@0.0.3':
     resolution: {integrity: sha512-QZGKfGb8sdmS/4U2ZdbG8VKD816Q2AoL4t23/WGXyo5wgpdjw4n9eNYNTwv8kp/pE02LzSBG+CUOMTb3UAqPoA==}
 
-  '@tailor-cms/core-components@1.0.19':
-    resolution: {integrity: sha512-bbwL8gJtMw4lFQVM9Sl4JMTN20jA2FDnIz4U0VPftq75eog8U3BmSy+26JpWCsI2jp9mpWeAfyMC8XiLmFAqbA==}
+  '@tailor-cms/core-components@1.0.20':
+    resolution: {integrity: sha512-e5PU0ggSkIZj7fuZk2pypvK+9ReOY2noBMewTcfkxPjDa/7+9U50Z/OA6i3SdY/GDX93vh34SeMhr6SBIOxojQ==}
     peerDependencies:
       '@tailor-cms/utils': 1.0.1
       '@tiptap/pm': ^2.4.0
@@ -708,12 +708,10 @@ packages:
       '@tiptap/vue-3': ^2.4.0
       '@types/lodash': ^4.17.10
       '@types/pluralize': ^0.0.33
-      '@types/uuid': ^10.0.0
       date-fns: ^3.6.0
       lodash: ^4.17.21
       p-min-delay: ^4.0.2
       pluralize: ^8.0.0
-      uuid: ^10.0.0
       vee-validate: ^4.13.2
       vue: ^3.3.4
       vuedraggable: ^4.1.0
@@ -738,8 +736,8 @@ packages:
       eslint-plugin-vue: '>=9.17.0'
       eslint-plugin-vuejs-accessibility: '>=2.2.0'
 
-  '@tailor-cms/lx-components@0.0.1':
-    resolution: {integrity: sha512-8EPHqQCe6OsgbrjBZnGKx91Zd6D4kY+pdRPvJutzPIPyUr/bqYd8/maFr/JFOZjuPdc1VFIb+MpJb+aL0R2PSA==}
+  '@tailor-cms/lx-components@0.0.2':
+    resolution: {integrity: sha512-7VlnCayqFThKEuEGcDdTbuAKRn921Y4v27TL1CFQyTvkIGLQYwgsgV32aYmUYV8FEnykTkay6l3TbDOhHeEZiA==}
     peerDependencies:
       vue: ^3.3.4
       vuetify: 3.7.0
@@ -975,9 +973,6 @@ packages:
 
   '@types/semver@7.5.7':
     resolution: {integrity: sha512-/wdoPq1QqkSj9/QOeKkFquEuPzQbHTWAMPH/PaUMB+JuR31lXhlWXRZ52IpfDYVlDOUBvX09uBrPwxGT1hjNBg==}
-
-  '@types/uuid@10.0.0':
-    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@types/validator@13.12.2':
     resolution: {integrity: sha512-6SlHBzUW8Jhf3liqrGGXyTJSIFe4nqlJ5A5KaMZ2l/vbM3Wh3KSybots/wfWVzNLK4D1NZluDlSQIbIEPx6oyA==}
@@ -4478,7 +4473,7 @@ snapshots:
 
   '@tailor-cms/cek-common@0.0.3': {}
 
-  '@tailor-cms/core-components@1.0.19(@tailor-cms/utils@1.0.1)(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(@tiptap/starter-kit@2.10.3)(@tiptap/vue-3@2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(vue@3.3.4))(@types/lodash@4.17.9)(@types/pluralize@0.0.33)(@types/uuid@10.0.0)(date-fns@3.6.0)(lodash@4.17.21)(p-min-delay@4.0.2)(pluralize@8.0.0)(uuid@11.0.3)(vee-validate@4.14.7(vue@3.3.4))(vue@3.3.4)(vuedraggable@4.1.0(vue@3.3.4))(vuetify@3.7.3)(yup@1.4.0)':
+  '@tailor-cms/core-components@1.0.20(@tailor-cms/utils@1.0.1)(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(@tiptap/starter-kit@2.10.3)(@tiptap/vue-3@2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(vue@3.3.4))(@types/lodash@4.17.9)(@types/pluralize@0.0.33)(date-fns@3.6.0)(lodash@4.17.21)(p-min-delay@4.0.2)(pluralize@8.0.0)(vee-validate@4.14.7(vue@3.3.4))(vue@3.3.4)(vuedraggable@4.1.0(vue@3.3.4))(vuetify@3.7.3)(yup@1.4.0)':
     dependencies:
       '@tailor-cms/utils': 1.0.1
       '@tiptap/extension-character-count': 2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)
@@ -4490,13 +4485,11 @@ snapshots:
       '@tiptap/vue-3': 2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))(@tiptap/pm@2.10.3)(vue@3.3.4)
       '@types/lodash': 4.17.9
       '@types/pluralize': 0.0.33
-      '@types/uuid': 10.0.0
       '@vueuse/core': 10.11.1(vue@3.3.4)
       date-fns: 3.6.0
       lodash: 4.17.21
       p-min-delay: 4.0.2
       pluralize: 8.0.0
-      uuid: 11.0.3
       vee-validate: 4.14.7(vue@3.3.4)
       vue: 3.3.4
       vuedraggable: 4.1.0(vue@3.3.4)
@@ -4521,7 +4514,7 @@ snapshots:
       eslint-plugin-vue: 9.21.1(eslint@8.56.0)
       eslint-plugin-vuejs-accessibility: 2.2.1(eslint@8.56.0)
 
-  '@tailor-cms/lx-components@0.0.1(vue@3.3.4)(vuetify@3.7.3)':
+  '@tailor-cms/lx-components@0.0.2(vue@3.3.4)(vuetify@3.7.3)':
     dependencies:
       vue: 3.3.4
       vuetify: 3.7.3(typescript@5.3.3)(vite-plugin-vuetify@1.0.2)(vue@3.3.4)
@@ -4953,8 +4946,6 @@ snapshots:
   '@types/pluralize@0.0.33': {}
 
   '@types/semver@7.5.7': {}
-
-  '@types/uuid@10.0.0': {}
 
   '@types/validator@13.12.2': {}
 
