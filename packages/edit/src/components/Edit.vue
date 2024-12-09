@@ -12,7 +12,7 @@
     @save="save"
     @update="updateData($event)"
   >
-    <div class="text-left text-subtitle-2 mb-2">{{ title }}</div>
+    <div class="text-subtitle-2 mb-2">{{ title }}</div>
     <VInput
       v-slot="{ isValid }"
       :model-value="elementData.correct"
@@ -114,7 +114,7 @@ const btnLabel = computed(() =>
 const validation = computed(() => ({
   answer: [(val: string) => !!val || 'Answer is required.'],
   correct: props.isGradeable
-    ? [(val: string) => isNumber(val) || 'Please choose the correct answer']
+    ? [(val?: number) => isNumber(val) || 'Please choose the correct answer']
     : [],
 }));
 
@@ -132,16 +132,12 @@ const removeAnswer = (index: number) => {
 const updateAnswer = (value: string, index: number) =>
   (elementData.answers[index] = value);
 
-const save = () => emit('save', elementData);
+const save = () => {
+  emit('save', elementData);
+};
 const updateData = (data: ElementData) => {
   Object.assign(elementData, cloneDeep(data));
 };
 
 watch(() => props.element.data, updateData);
 </script>
-
-<style lang="scss" scoped>
-.tce-single-choice {
-  text-align: left;
-}
-</style>
