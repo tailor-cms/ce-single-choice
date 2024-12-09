@@ -64,8 +64,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { ElementData } from '@tailor-cms/ce-single-choice-manifest';
-
-import QuestionContainer from './QuestionContainer/index.vue';
+import { QuestionContainer } from '@tailor-cms/lx-components';
 
 const props = defineProps<{ id: number; data: ElementData; userState: any }>();
 const emit = defineEmits(['interaction']);
