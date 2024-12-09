@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-manifest
 
+## 0.0.7
+
+### Patch Changes
+
+- Reuse QuestionContainer from core-components and lx-components.
+
 ## 0.0.6
 
 ### Patch Changes
