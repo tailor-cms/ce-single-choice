@@ -9,7 +9,7 @@
           v-if="data.hint"
           v-model="showHint"
           :open-on-hover="false"
-          location="bottom"
+          location="bottom end"
           max-width="350"
           close-on-back
           open-on-click
