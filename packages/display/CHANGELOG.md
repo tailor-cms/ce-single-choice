@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.8
+
+### Patch Changes
+
+- Bumped tce-boot version.
+
 ## 0.0.7
 
 ### Patch Changes
