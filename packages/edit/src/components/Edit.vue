@@ -53,11 +53,13 @@
             <VBtn
               aria-label="Remove answer"
               color="primary-darken-4"
-              density="comfortable"
-              icon="mdi-close"
+              size="x-small"
               variant="text"
+              icon
               @click="removeAnswer(index)"
-            />
+            >
+              <VIcon icon="mdi-close" size="large" />
+            </VBtn>
           </template>
         </VTextField>
       </VSlideYTransition>
@@ -112,7 +114,7 @@ const btnLabel = computed(() =>
 );
 
 const validation = computed(() => ({
-  answer: [(val: string) => !!val || 'Answer is required.'],
+  answer: [(val: string) => !!val || 'Answer is required'],
   correct: props.isGradeable
     ? [(val?: number) => isNumber(val) || 'Please choose the correct answer']
     : [],

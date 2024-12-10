@@ -11,7 +11,7 @@
     <div class="text-subtitle-2 mb-2">Select one:</div>
     <VInput
       :model-value="selectedAnswer"
-      :rules="[(val: number) => !isNaN(val) || 'You have to select an answer.']"
+      :rules="[requiredRule]"
       hide-details="auto"
       validate-on="submit"
     >
@@ -77,6 +77,9 @@ const isGraded = computed(() => 'isCorrect' in props.userState);
 const indexToAlpha = (index: number) => String.fromCharCode(index + 65);
 const isCorrect = (index: number) => props.userState.correct === index;
 const submit = () => emit('interaction', { response: selectedAnswer.value });
+
+const requiredRule = (val: number) =>
+  typeof val === 'number' || 'You have to select an answer';
 
 watch(
   () => props.userState,
