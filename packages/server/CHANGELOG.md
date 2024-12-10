@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-server
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated validation messages and btn icon sizes.
+
 ## 0.0.8
 
 ### Patch Changes
