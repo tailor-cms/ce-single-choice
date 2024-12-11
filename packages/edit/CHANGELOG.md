@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-edit
 
+## 0.0.10
+
+### Patch Changes
+
+- Pinned playwright version in github actions.
+
 ## 0.0.9
 
 ### Patch Changes
