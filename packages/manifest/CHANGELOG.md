@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-manifest
 
+## 0.0.11
+
+### Patch Changes
+
+- Fixed typo in End User component.
+
 ## 0.0.10
 
 ### Patch Changes
