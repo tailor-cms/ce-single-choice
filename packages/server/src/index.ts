@@ -40,7 +40,7 @@ export function afterRetrieve(
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function beforeDisplay(element: Element, context: any) {
   if (IS_CEK) USER_STATE.correct = element.data.correct;
-  return { ...context, ...USER_STATE, correct: element.data.correct };
+  return { ...context, ...USER_STATE };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

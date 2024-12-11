@@ -134,9 +134,8 @@ const removeAnswer = (index: number) => {
 const updateAnswer = (value: string, index: number) =>
   (elementData.answers[index] = value);
 
-const save = () => {
-  emit('save', elementData);
-};
+const save = () => emit('save', elementData);
+
 const updateData = (data: ElementData) => {
   Object.assign(elementData, cloneDeep(data));
 };
