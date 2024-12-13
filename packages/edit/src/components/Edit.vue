@@ -5,7 +5,6 @@
       elementData,
       isDirty,
       isDisabled,
-      isGradeable,
     }"
     show-feedback
     @cancel="updateData(element.data)"
@@ -32,7 +31,7 @@
         >
           <template #prepend>
             <VRadio
-              v-if="isGradeable"
+              v-if="isGradable"
               :error="isValid.value === false"
               :model-value="elementData.correct === index"
               :readonly="isDisabled"
@@ -93,29 +92,29 @@ const props = defineProps<{
   element: Element;
   isFocused: boolean;
   isDisabled: boolean;
-  isGradeable: boolean;
 }>();
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
+const isGradable = computed(() => props.element.data.isGradable);
 const answersCount = computed(() => elementData.answers.length);
 const isDirty = computed(() => !isEqual(elementData, props.element.data));
 
 const title = computed(() =>
-  props.isGradeable ? 'Select correct answer' : 'Options',
+  isGradable.value ? 'Select correct answer' : 'Options',
 );
 
 const placeholder = computed(() =>
-  props.isGradeable ? 'Answer...' : 'Option...',
+  isGradable.value ? 'Answer...' : 'Option...',
 );
 
 const btnLabel = computed(() =>
-  props.isGradeable ? 'Add answer' : 'Add option',
+  isGradable.value ? 'Add answer' : 'Add option',
 );
 
 const validation = computed(() => ({
   answer: [(val: string) => !!val || 'Answer is required'],
-  correct: props.isGradeable
+  correct: isGradable.value
     ? [(val?: number) => isNumber(val) || 'Please choose the correct answer']
     : [],
 }));
@@ -124,7 +123,7 @@ const addAnswer = () => elementData.answers.push('');
 const removeAnswer = (index: number) => {
   elementData.answers.splice(index, 1);
 
-  if (props.isGradeable) {
+  if (isGradable.value) {
     if (elementData.correct === index) elementData.correct = null;
     if (elementData.correct && elementData.correct >= index)
       elementData.correct--;

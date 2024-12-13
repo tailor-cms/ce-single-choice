@@ -1,4 +1,5 @@
 export interface ElementData {
+  isGradable?: boolean;
   embeds: Record<string, any>;
   question: string[];
   correct?: number | null;
@@ -35,6 +36,7 @@ export interface ElementManifest {
   ssr: boolean;
   isComposite: boolean;
   isQuestion: boolean;
+  isGradable?: boolean;
   initState: DataInitializer;
   Edit?: object;
   TopToolbar?: object;
