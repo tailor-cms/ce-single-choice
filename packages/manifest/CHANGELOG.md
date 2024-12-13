@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-manifest
 
+## 0.0.12
+
+### Patch Changes
+
+- Refactored isGradable handling, by storing it directly in element data.
+
 ## 0.0.11
 
 ### Patch Changes
