@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-edit
 
+## 0.0.14
+
+### Patch Changes
+
+- Rebuild package.
+
 ## 0.0.13
 
 ### Patch Changes
