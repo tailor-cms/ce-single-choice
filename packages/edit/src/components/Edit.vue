@@ -1,7 +1,9 @@
 <template>
   <QuestionContainer
     v-bind="{
-      allowedEmbedTypes,
+      type: manifest.name,
+      icon: manifest.ui.icon,
+      embedTypes,
       elementData,
       isDirty,
       isDisabled,
@@ -11,12 +13,12 @@
     @save="save"
     @update="updateData($event)"
   >
-    <div class="text-subtitle-2 mb-2">{{ title }}</div>
     <VInput
       v-slot="{ isValid }"
       :model-value="elementData.correct"
       :rules="validation.correct"
     >
+      <div class="text-subtitle-2 mb-2">{{ title }}</div>
       <VSlideYTransition group>
         <VTextField
           v-for="(answer, index) in elementData.answers"
@@ -80,7 +82,10 @@
 
 <script lang="ts" setup>
 import { computed, defineEmits, defineProps, reactive, watch } from 'vue';
-import { Element, ElementData } from '@tailor-cms/ce-single-choice-manifest';
+import manifest, {
+  Element,
+  ElementData,
+} from '@tailor-cms/ce-single-choice-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import isNumber from 'lodash/isNumber';
@@ -88,7 +93,7 @@ import { QuestionContainer } from '@tailor-cms/core-components';
 
 const emit = defineEmits(['save']);
 const props = defineProps<{
-  allowedEmbedTypes: string[];
+  embedTypes: any[];
   element: Element;
   isFocused: boolean;
   isDisabled: boolean;

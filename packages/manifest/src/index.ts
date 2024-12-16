@@ -39,7 +39,6 @@ const manifest: ElementManifest = {
   name,
   isComposite: true,
   isQuestion: true,
-  isGradable: true,
   ssr: false,
   initState,
   ui,
