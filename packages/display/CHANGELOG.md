@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.15
+
+### Patch Changes
+
+- Bumped tce-display-runtime.
+
 ## 0.0.14
 
 ### Patch Changes
