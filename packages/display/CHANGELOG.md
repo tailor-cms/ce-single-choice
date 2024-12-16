@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.13
+
+### Patch Changes
+
+- Bumped core-components package which tweaks Question Container styling.
+
 ## 0.0.12
 
 ### Patch Changes
