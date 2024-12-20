@@ -1,16 +1,24 @@
 <template>
-  <VForm ref="form" class="tce-root" @submit.prevent="submit">
-    <div class="px-2 my-4">{{ data.question }}</div>
+  <QuestionContainer
+    :data="data"
+    :is-correct="userState.isCorrect"
+    :is-graded="isGraded"
+    :is-submitted="isSubmitted"
+    allowed-retake
+    @retry="isSubmitted = false"
+    @submit="submit"
+  >
+    <div class="text-subtitle-2 mb-2">Select one:</div>
     <VInput
+      :model-value="selectedAnswer"
       :rules="[requiredRule]"
-      :validation-value="selectedAnswer !== null"
       hide-details="auto"
       validate-on="submit"
     >
       <VItemGroup
         v-model="selectedAnswer"
-        class="w-100"
-        selected-class="bg-blue-grey-lighten-4"
+        class="w-100 d-flex flex-column ga-2"
+        selected-class="bg-blue-grey-lighten-5"
         mandatory
       >
         <VItem
@@ -21,11 +29,11 @@
         >
           <VCard
             :class="selectedClass"
-            :disabled="submitted"
-            class="d-flex align-center px-4 py-3 mb-3"
-            color="blue-grey-darken-2"
-            rounded="lg"
-            variant="outlined"
+            :disabled="isSubmitted"
+            class="d-flex align-center px-4 py-3"
+            border
+            flat
+            rounded
             @click="toggle"
           >
             <VAvatar
@@ -35,71 +43,50 @@
               color="blue-grey-darken-2"
               size="small"
             >
-              {{ index + 1 }}
+              {{ indexToAlpha(index) }}
             </VAvatar>
             {{ item }}
             <VSpacer />
-            <template v-if="submitted">
-              <VIcon v-if="isSelected" v-bind="iconProps(index)" />
+            <template v-if="isSubmitted && isGraded">
+              <VIcon
+                v-if="isSelected"
+                :color="isCorrect(index) ? 'success' : 'error'"
+                :icon="`mdi-${isCorrect(index) ? 'check' : 'close'}-circle`"
+              />
             </template>
           </VCard>
         </VItem>
       </VItemGroup>
     </VInput>
-    <VAlert
-      v-if="submitted"
-      :text="userState?.isCorrect ? 'Correct' : 'Incorrect'"
-      :type="userState?.isCorrect ? 'success' : 'error'"
-      class="mb-3"
-      rounded="lg"
-      variant="tonal"
-    />
-    <div class="d-flex justify-end">
-      <VBtn v-if="!submitted" type="submit" variant="tonal">Submit</VBtn>
-      <VBtn v-else variant="tonal" @click="submitted = false">Try Again</VBtn>
-    </div>
-  </VForm>
+  </QuestionContainer>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { ElementData } from '@tailor-cms/ce-single-choice-manifest';
+import { QuestionContainer } from '@tailor-cms/lx-components';
 
 const props = defineProps<{ id: number; data: ElementData; userState: any }>();
 const emit = defineEmits(['interaction']);
 
-const form = ref<HTMLFormElement>();
-const submitted = ref('isCorrect' in (props.userState ?? {}));
-const selectedAnswer = ref<string>(props.userState?.response ?? null);
+const isSubmitted = ref(!!props.userState.isSubmitted);
+const selectedAnswer = ref<string>(props.userState.response ?? null);
 
-const submit = async () => {
-  const { valid } = await form.value?.validate();
-  if (valid) emit('interaction', { response: selectedAnswer.value });
-};
+const isGraded = computed(() => 'isCorrect' in props.userState);
 
-const requiredRule = (val: string | boolean | number) => {
-  return !!val || 'You have to select an answer.';
-};
+const indexToAlpha = (index: number) => String.fromCharCode(index + 65);
+const isCorrect = (index: number) => props.userState.correct === index;
+const submit = () => emit('interaction', { response: selectedAnswer.value });
 
-const iconProps = (index: number) => {
-  const isCorrect = props.userState?.correct === index;
-  if (isCorrect) return { icon: 'mdi-check-circle', color: 'success' };
-  return { icon: 'mdi-close-circle', color: 'error' };
-};
+const requiredRule = (val: number) =>
+  typeof val === 'number' || 'You have to select an answer';
 
 watch(
   () => props.userState,
   (state = {}) => {
     selectedAnswer.value = state.response ?? null;
-    submitted.value = 'isCorrect' in state;
+    isSubmitted.value = !!state.isSubmitted;
   },
   { deep: true },
 );
 </script>
-
-<style scoped>
-.tce-root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-}
-</style>

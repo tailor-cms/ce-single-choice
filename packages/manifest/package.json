@@ -1,9 +1,9 @@
 {
   "name": "@tailor-cms/ce-single-choice-manifest",
-  "description": "Tailor CMS single choice element",
+  "description": "Tailor CMS single choice manifest",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
-  "version": "0.0.5",
+  "version": "0.0.15",
   "exports": {
     ".": {
       "import": "./dist/index.js",

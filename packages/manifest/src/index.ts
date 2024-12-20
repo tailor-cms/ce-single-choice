@@ -13,9 +13,12 @@ export const name = 'Single choice';
 // Function which inits element state (data property on the Content Element
 // entity)
 export const initState: DataInitializer = (): ElementData => ({
-  question: '',
   correct: null,
+  embeds: {},
+  question: [],
   answers: ['', ''],
+  hint: '',
+  feedback: {},
 });
 
 // Can be loaded from package.json
@@ -30,18 +33,15 @@ const ui = {
   forceFullWidth: true,
 };
 
-export const mocks = {
-  displayContexts: [{ name: 'No selection', data: {} }],
-};
-
 const manifest: ElementManifest = {
   type,
   version: '1.0',
   name,
+  isComposite: true,
+  isQuestion: true,
   ssr: false,
   initState,
   ui,
-  mocks,
 };
 
 export default manifest;
