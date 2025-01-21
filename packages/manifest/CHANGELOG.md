@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-manifest
 
+## 0.0.16
+
+### Patch Changes
+
+- Remove prefix from element type.
+
 ## 0.0.15
 
 ### Patch Changes
