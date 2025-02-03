@@ -1,17 +1,8 @@
 <template>
   <QuestionContainer
-    v-bind="{
-      type: manifest.name,
-      icon: manifest.ui.icon,
-      elementData,
-      embedElementConfig,
-      isDirty,
-      isDisabled,
-    }"
+    v-bind="{ elementData, embedElementConfig, isDisabled }"
     show-feedback
-    @cancel="updateData(element.data)"
-    @save="save"
-    @update="updateData($event)"
+    @update="emit('update', $event)"
   >
     <VInput
       v-slot="{ isValid }"
@@ -29,7 +20,7 @@
           :rules="validation.answer"
           class="my-2 w-100"
           variant="outlined"
-          @update:model-value="updateAnswer($event, index)"
+          @update:model-value="updateAnswer(index, $event)"
         >
           <template #prepend>
             <VRadio
@@ -50,7 +41,7 @@
               {{ index + 1 }}
             </VAvatar>
           </template>
-          <template v-if="!isDisabled && answersCount > 2" #append>
+          <template v-if="!isDisabled && answers.length > 2" #append>
             <VBtn
               aria-label="Remove answer"
               color="primary-darken-4"
@@ -81,29 +72,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineEmits, defineProps, reactive, watch } from 'vue';
-import manifest, {
-  Element,
-  ElementData,
-} from '@tailor-cms/ce-single-choice-manifest';
+import { computed, defineEmits, defineProps } from 'vue';
 import cloneDeep from 'lodash/cloneDeep';
-import isEqual from 'lodash/isEqual';
+import { Element } from '@tailor-cms/ce-single-choice-manifest';
 import isNumber from 'lodash/isNumber';
 import { QuestionContainer } from '@tailor-cms/core-components';
+import range from 'lodash/range';
+import set from 'lodash/set';
 
-const emit = defineEmits(['save']);
 const props = defineProps<{
   element: Element;
   embedElementConfig: any[];
   isFocused: boolean;
   isDisabled: boolean;
 }>();
+const emit = defineEmits(['save', 'update']);
 
-const elementData = reactive<ElementData>(cloneDeep(props.element.data));
-
-const isGradable = computed(() => props.element.data.isGradable);
-const answersCount = computed(() => elementData.answers.length);
-const isDirty = computed(() => !isEqual(elementData, props.element.data));
+const elementData = computed(() => props.element.data);
+const isGradable = computed(() => elementData.value.isGradable);
+const answers = computed(() => elementData.value.answers);
 
 const title = computed(() =>
   isGradable.value ? 'Select correct answer' : 'Options',
@@ -124,25 +111,27 @@ const validation = computed(() => ({
     : [],
 }));
 
-const addAnswer = () => elementData.answers.push('');
+const addAnswer = () => emit('update', { answers: [...answers.value, ''] });
 const removeAnswer = (index: number) => {
-  elementData.answers.splice(index, 1);
+  let { answers, correct, feedback } = cloneDeep(elementData.value);
+  answers.splice(index, 1);
 
   if (isGradable.value) {
-    if (elementData.correct === index) elementData.correct = null;
-    if (elementData.correct && elementData.correct >= index)
-      elementData.correct--;
+    if (correct === index) correct = null;
+    if (correct && correct >= index) correct--;
   }
+
+  if (feedback) {
+    range(index, answers.length).forEach((it) => {
+      feedback[it] = feedback[it + 1];
+    });
+    delete feedback[answers.length];
+  }
+
+  emit('update', { answers, correct, feedback });
 };
 
-const updateAnswer = (value: string, index: number) =>
-  (elementData.answers[index] = value);
-
-const save = () => emit('save', elementData);
-
-const updateData = (data: ElementData) => {
-  Object.assign(elementData, cloneDeep(data));
+const updateAnswer = (index: number, value: string) => {
+  emit('update', { answers: set(cloneDeep(answers.value), index, value) });
 };
-
-watch(() => props.element.data, updateData);
 </script>

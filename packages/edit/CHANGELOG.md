@@ -1,5 +1,17 @@
 # @tailor-cms/ce-single-choice-edit
 
+## 0.0.18
+
+### Patch Changes
+
+- Bumped core and lx components packages, removed redundant question prop in data.
+
+## 0.0.17
+
+### Patch Changes
+
+- Updated package to follow new question element component composition.
+
 ## 0.0.16
 
 ### Patch Changes
