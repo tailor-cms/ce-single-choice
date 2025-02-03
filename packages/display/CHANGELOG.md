@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.17
+
+### Patch Changes
+
+- Updated package to follow new question element component composition.
+
 ## 0.0.16
 
 ### Patch Changes
