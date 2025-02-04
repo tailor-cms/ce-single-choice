@@ -3,7 +3,7 @@
   "description": "Tailor CMS single choice end-user component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -32,7 +32,7 @@
     "vue-tsc": "^1.8.5"
   },
   "dependencies": {
-    "@tailor-cms/lx-components": "^0.0.3"
+    "@tailor-cms/lx-components": "^0.0.4"
   },
   "publishConfig": {
     "access": "public"
