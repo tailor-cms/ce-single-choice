@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-manifest
 
+## 0.0.20
+
+### Patch Changes
+
+- Revert to old structutre with question prop.
+
 ## 0.0.19
 
 ### Patch Changes
