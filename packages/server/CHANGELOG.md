@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-server
 
+## 0.0.19
+
+### Patch Changes
+
+- Bumped core-components package.
+
 ## 0.0.18
 
 ### Patch Changes
