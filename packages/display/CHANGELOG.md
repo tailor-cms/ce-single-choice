@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-display
 
+## 0.0.21
+
+### Patch Changes
+
+- Bumped to the latest tce-boot and core-components version and migrated code accordingly.
+
 ## 0.0.20
 
 ### Patch Changes

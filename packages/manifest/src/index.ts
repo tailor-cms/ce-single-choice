@@ -8,7 +8,7 @@ import type {
 export const type = 'SINGLE_CHOICE';
 
 // Display name (e.g. shown to the author)
-export const name = 'Single choice';
+export const name = 'Single Choice';
 
 // Function which inits element state (data property on the Content Element
 // entity)
