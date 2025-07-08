@@ -20,7 +20,7 @@ export const initState: DataInitializer = (): ElementData => ({
   embeds: {},
   question: [],
   correct: null,
-  answers: ['', ''],
+  answers: ['', '', '', ''],
   hint: '',
   feedback: {},
 });
@@ -40,7 +40,7 @@ const ui = {
 export const ai = {
   Schema: {
     type: 'json_schema',
-    name: 'ce_tiptap_html',
+    name: 'ce_single_choice',
     schema: {
       type: 'object',
       properties: {
