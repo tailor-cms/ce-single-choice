@@ -1,4 +1,4 @@
-# ce-multiple-choice
+# ce-single-choice
 
 Tailor single choice content element component.
 
