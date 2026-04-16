@@ -73,7 +73,7 @@
 
 <script lang="ts" setup>
 import { cloneDeep, isNumber, range, set } from 'lodash-es';
-import { computed, defineEmits, defineProps } from 'vue';
+import { computed } from 'vue';
 import { Element } from '@tailor-cms/ce-single-choice-manifest';
 import { QuestionContainer } from '@tailor-cms/core-components';
 
