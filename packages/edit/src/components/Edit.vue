@@ -1,15 +1,11 @@
 <template>
-  <QuestionContainer
-    v-bind="{ elementData, embedElementConfig, isReadonly }"
-    show-feedback
-    @update="emit('update', $event)"
-  >
+  <div class="tce-single-choice">
     <VInput
       v-slot="{ isValid }"
       :model-value="elementData.correct"
       :rules="validation.correct"
     >
-      <div class="text-subtitle-2 mb-2">{{ title }}</div>
+      <div class="text-title-small mb-2">{{ title }}</div>
       <VSlideYTransition group>
         <VTextField
           v-for="(answer, index) in elementData.answers"
@@ -30,7 +26,7 @@
               :readonly="isReadonly"
               color="primary"
               hide-details
-              @click="elementData.correct = index"
+              @click="selectCorrect(index)"
             />
             <VAvatar
               v-else
@@ -45,13 +41,11 @@
             <VBtn
               aria-label="Remove answer"
               color="primary-darken-4"
+              icon="mdi-close"
               size="x-small"
               variant="text"
-              icon
               @click="removeAnswer(index)"
-            >
-              <VIcon icon="mdi-close" size="large" />
-            </VBtn>
+            />
           </template>
         </VTextField>
       </VSlideYTransition>
@@ -61,21 +55,21 @@
         v-if="!isReadonly"
         color="primary-darken-4"
         prepend-icon="mdi-plus"
+        text="Add answer"
         variant="text"
-        rounded
         @click="addAnswer"
-      >
-        {{ btnLabel }}
-      </VBtn>
+      />
     </div>
-  </QuestionContainer>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import type {
+  Element,
+  ElementData,
+} from '@tailor-cms/ce-single-choice-manifest';
 import { cloneDeep, isNumber, range, set } from 'lodash-es';
 import { computed } from 'vue';
-import { Element } from '@tailor-cms/ce-single-choice-manifest';
-import { QuestionContainer } from '@tailor-cms/core-components';
 
 const props = defineProps<{
   element: Element;
@@ -84,7 +78,10 @@ const props = defineProps<{
   isFocused: boolean;
   isReadonly: boolean;
 }>();
-const emit = defineEmits(['save', 'update']);
+
+const emit = defineEmits<{
+  update: [data: Partial<ElementData>];
+}>();
 
 const elementData = computed(() => props.element.data);
 const isGradable = computed(() => elementData.value.isGradable);
@@ -98,10 +95,6 @@ const placeholder = computed(() =>
   isGradable.value ? 'Answer...' : 'Option...',
 );
 
-const btnLabel = computed(() =>
-  isGradable.value ? 'Add answer' : 'Add option',
-);
-
 const validation = computed(() => ({
   answer: [(val: string) => !!val || 'Answer is required'],
   correct: isGradable.value
@@ -109,7 +102,10 @@ const validation = computed(() => ({
     : [],
 }));
 
+const selectCorrect = (index: number) => emit('update', { correct: index });
+
 const addAnswer = () => emit('update', { answers: [...answers.value, ''] });
+
 const removeAnswer = (index: number) => {
   let { answers, correct, feedback } = cloneDeep(elementData.value);
   answers.splice(index, 1);
@@ -133,3 +129,9 @@ const updateAnswer = (index: number, value: string) => {
   emit('update', { answers: set(cloneDeep(answers.value), index, value) });
 };
 </script>
+
+<style lang="scss" scoped>
+.tce-single-choice {
+  text-align: left;
+}
+</style>

@@ -1,5 +1,8 @@
+import type {
+  AiConfig,
+  ElementMocks,
+} from '@tailor-cms/cek-common';
 import { pick, times } from 'lodash-es';
-import { OpenAISchema } from '@tailor-cms/cek-common';
 import { v4 as uuid } from 'uuid';
 
 import type {
@@ -16,17 +19,38 @@ export const name = 'Single Choice';
 
 // Function which inits element state (data property on the Content Element
 // entity)
-export const initState: DataInitializer = (): ElementData => ({
-  embeds: {},
-  question: [],
-  correct: null,
-  answers: ['', '', '', ''],
-  hint: '',
-  feedback: {},
-});
+export const initState: DataInitializer = (config): ElementData => {
+  const isGradable = config?.isGradable ?? true;
+  return {
+    isGradable,
+    embeds: {},
+    question: [],
+    answers: ['', '', '', ''],
+    hint: '',
+    feedback: {},
+    ...(isGradable && { correct: null }),
+  };
+};
 
 // Can be loaded from package.json
 export const version = '1.0';
+
+export const isEmpty = (data: ElementData): boolean =>
+  !data.question?.length && !data.answers?.some((it) => !!it);
+
+export const mocks: ElementMocks = {
+  displayContexts: [
+    { name: 'No answer', data: {} },
+    {
+      name: 'Correct answer',
+      data: { response: 0, isCorrect: true, isSubmitted: true },
+    },
+    {
+      name: 'Wrong answer',
+      data: { response: 1, isCorrect: false, isSubmitted: true },
+    },
+  ],
+};
 
 // UI configuration for Tailor CMS
 const ui = {
@@ -37,7 +61,7 @@ const ui = {
   forceFullWidth: true,
 };
 
-export const ai = {
+export const ai: AiConfig = {
   Schema: {
     type: 'json_schema',
     name: 'ce_single_choice',
@@ -62,7 +86,7 @@ export const ai = {
       required: ['question', 'answers', 'correct', 'feedback', 'hint'],
       additionalProperties: false,
     },
-  } as OpenAISchema,
+  },
   getPrompt: () => `
     Generate single choice question as an object with the following properties:
     {
@@ -101,14 +125,17 @@ export const ai = {
 
 const manifest: ElementManifest = {
   type,
-  version: '1.0',
+  version,
   name,
-  isComposite: true,
-  isQuestion: true,
   ssr: false,
+  isQuestion: true,
+  isComposite: true,
+  isGradable: true,
   initState,
+  isEmpty,
   ui,
   ai,
+  mocks,
 };
 
 export default manifest;
