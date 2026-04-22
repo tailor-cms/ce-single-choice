@@ -56,8 +56,8 @@ export const onUserInteraction: OnUserInteractionHook<Element> = (
 export const hookMap: HookMap<Element> = new Map(
   Object.entries({
     afterLoaded,
-    onUserInteraction,
     beforeDisplay,
+    onUserInteraction,
   }),
 );
 
@@ -66,8 +66,8 @@ const serverModule: ServerModule<Element> = {
   initState,
   hookMap,
   afterLoaded,
-  onUserInteraction,
   beforeDisplay,
+  onUserInteraction,
   mocks,
   ai,
 };
