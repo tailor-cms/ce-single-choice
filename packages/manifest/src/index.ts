@@ -33,7 +33,7 @@ export const initState: DataInitializer = (config): ElementData => {
 export const version = '1.0';
 
 export const isEmpty = (data: ElementData): boolean =>
-  !data.question?.length && !data.answers?.some((it) => !!it);
+  !data.question?.length || !data.answers?.some((it) => !!it);
 
 export const mocks: ElementMocks = {
   displayContexts: [
@@ -127,7 +127,6 @@ const manifest: ElementManifest = {
   ssr: false,
   isQuestion: true,
   isComposite: true,
-  isGradable: true,
   initState,
   isEmpty,
   ui,

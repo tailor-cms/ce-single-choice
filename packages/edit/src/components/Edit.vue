@@ -14,7 +14,7 @@
           :placeholder="placeholder"
           :readonly="isReadonly"
           :rules="validation.answer"
-          class="my-2 w-100"
+          class="answer-input my-2 w-100"
           variant="outlined"
           @update:model-value="updateAnswer(index, $event)"
         >
@@ -64,11 +64,11 @@
 </template>
 
 <script lang="ts" setup>
+import { cloneDeep, isNumber, range, set } from 'lodash-es';
 import type {
   Element,
   ElementData,
 } from '@tailor-cms/ce-single-choice-manifest';
-import { cloneDeep, isNumber, range, set } from 'lodash-es';
 import { computed } from 'vue';
 
 const props = defineProps<{
