@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { elementClient, pom } from '@tailor-cms/cek-e2e';
+import { expect, test } from '@playwright/test';
 
 import { Display } from '../pom';
 
