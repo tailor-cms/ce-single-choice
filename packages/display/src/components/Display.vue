@@ -1,15 +1,6 @@
 <template>
-  <QuestionContainer
-    :data="element.data"
-    :feedback="feedback"
-    :is-correct="userState.isCorrect"
-    :is-graded="isGraded"
-    :is-submitted="isSubmitted"
-    allowed-retake
-    @retry="isSubmitted = false"
-    @submit="submit"
-  >
-    <div class="text-subtitle-2 mb-2">Select one:</div>
+  <div class="tce-single-choice">
+    <div class="text-title-small mb-2">Select one:</div>
     <VInput
       :model-value="selectedAnswer"
       :rules="[requiredRule]"
@@ -19,7 +10,6 @@
       <VItemGroup
         v-model="selectedAnswer"
         class="w-100 d-flex flex-column ga-2"
-        selected-class="bg-blue-grey-lighten-5"
         mandatory
       >
         <VItem
@@ -31,17 +21,16 @@
           <VCard
             v-bind="isSubmitted ? {} : { onClick: toggle }"
             :class="{ readonly: isSubmitted, selected: isSelected }"
-            :color="isSelected ? 'primary-darken-1' : 'white'"
+            :color="isSelected ? 'primary' : 'transparent'"
             :variant="isSelected ? 'tonal' : 'flat'"
             class="d-flex align-center px-4 py-3"
             border
-            rounded
           >
             <VAvatar
               :class="{ 'font-weight-bold': isSelected }"
               :variant="isSelected ? 'flat' : 'outlined'"
               class="mr-4"
-              color="primary-darken-1"
+              color="primary"
               size="small"
             >
               {{ indexToAlpha(index) }}
@@ -59,33 +48,31 @@
         </VItem>
       </VItemGroup>
     </VInput>
-  </QuestionContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { Element } from '@tailor-cms/ce-single-choice-manifest';
-import { pick } from 'lodash-es';
-import { QuestionContainer } from '@tailor-cms/lx-components';
+import type { Element } from '@tailor-cms/ce-single-choice-manifest';
 
 const props = defineProps<{ element: Element; userState: any }>();
-const emit = defineEmits(['interaction']);
+const emit = defineEmits<{
+  'user-input': [data: { response: number | null }];
+}>();
 
-const isSubmitted = ref(!!props.userState.isSubmitted);
-const selectedAnswer = ref<number>(props.userState.response ?? null);
+const isSubmitted = ref(!!props.userState?.isSubmitted);
+const selectedAnswer = ref<number | null>(props.userState?.response ?? null);
 
-const isGraded = computed(() => 'isCorrect' in props.userState);
+const isGraded = computed(() => 'isCorrect' in (props.userState ?? {}));
 
 const indexToAlpha = (index: number) => String.fromCharCode(index + 65);
-const isCorrect = (index: number) => props.userState.correct === index;
-const submit = () => emit('interaction', { response: selectedAnswer.value });
-const feedback = computed(() => {
-  const feedback = props.element.data.feedback;
-  if (selectedAnswer.value === null) return;
-  return pick(feedback, selectedAnswer.value);
+const isCorrect = (index: number) => props.userState?.correct === index;
+
+watch(selectedAnswer, (val) => {
+  if (val !== null) emit('user-input', { response: val });
 });
 
-const requiredRule = (val: number) =>
+const requiredRule = (val: number | null) =>
   typeof val === 'number' || 'You have to select an answer';
 
 watch(
@@ -99,6 +86,10 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+.tce-single-choice {
+  text-align: left;
+}
+
 .v-input .selected.v-card {
   border: 1px solid color-mix(in srgb, currentColor 36%, transparent);
 }
