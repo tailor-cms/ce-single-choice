@@ -102,7 +102,10 @@ const validation = computed(() => ({
     : [],
 }));
 
-const selectCorrect = (index: number) => emit('update', { correct: index });
+const selectCorrect = (index: number) => {
+  if (props.isReadonly) return;
+  emit('update', { correct: index });
+};
 
 const addAnswer = () => emit('update', { answers: [...answers.value, ''] });
 
