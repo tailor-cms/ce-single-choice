@@ -2,6 +2,13 @@
   "name": "@tailor-cms/ce-single-choice-server",
   "description": "Tailor CMS single choice server component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailor-cms/ce-single-choice.git",
+    "directory": "packages/server"
+  },
+  "homepage": "https://github.com/tailor-cms/ce-single-choice#readme",
+  "bugs": "https://github.com/tailor-cms/ce-single-choice/issues",
   "type": "module",
   "version": "2.0.3",
   "exports": {
