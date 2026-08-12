@@ -127,6 +127,7 @@ const manifest: ElementManifest = {
   ssr: false,
   isQuestion: true,
   isComposite: true,
+  showAnswerFeedback: true,
   initState,
   isEmpty,
   ui,
