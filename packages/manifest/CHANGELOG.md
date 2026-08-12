@@ -1,5 +1,11 @@
 # @tailor-cms/ce-single-choice-manifest
 
+## 2.1.0
+
+### Minor Changes
+
+- Migrate to the latest CEK version which introduced general feedback.
+
 ## 2.0.2
 
 ### Patch Changes
