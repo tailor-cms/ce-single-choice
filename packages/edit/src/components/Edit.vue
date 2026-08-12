@@ -31,7 +31,7 @@
             <VAvatar
               v-else
               class="font-weight-bold ma-1"
-              color="primary-darken-3"
+              color="surface-container-highest"
               size="small"
             >
               {{ index + 1 }}
@@ -40,9 +40,9 @@
           <template v-if="!isReadonly && answers.length > 2" #append>
             <VBtn
               aria-label="Remove answer"
-              color="primary-darken-4"
+              density="comfortable"
               icon="mdi-close"
-              size="x-small"
+              size="small"
               variant="text"
               @click="removeAnswer(index)"
             />
@@ -53,7 +53,6 @@
     <div class="d-flex justify-end mb-4">
       <VBtn
         v-if="!isReadonly"
-        color="primary-darken-4"
         prepend-icon="mdi-plus"
         text="Add answer"
         variant="text"
