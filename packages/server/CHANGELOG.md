@@ -1,5 +1,13 @@
 # @tailor-cms/ce-single-choice-server
 
+## 2.1.2
+
+### Patch Changes
+
+- Tweak spacings.
+- Updated dependencies
+  - @tailor-cms/ce-single-choice-manifest@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes
